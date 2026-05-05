@@ -1,0 +1,230 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- meta tags for the browser and earch engines -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
+    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
+    <title>BAYOUstore</title>
+    <!-- External CSS link -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+	<link rel="stylesheet" href="{% static 'style-products.css' %}">
+	<link rel="stylesheet" href="{% static 'Alecs_Beautiful_script.css' %}">
+    <link rel="stylesheet" href="{% static 'Homepage_Seller.css' %}">
+</head>
+
+<body>
+    <!-- header area -->
+    <header class="header">
+        <!-- navigation bar -->
+        <nav class="navbar">
+            <!-- Website logo: links back to the homepage -->
+            <a href="{% url 'home' %}" class="logo-link">
+                <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
+            </a>
+
+            <!-- links to different website pages -->
+            <ul class="nav-links">
+                
+                <!-- Seller page is available without login for now(login logic will be added later) -->
+                <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
+                <!--Alec's drop down list for the account button that mehwish made  -->
+                <li>
+                    <button>Account</button>
+                    <ul>
+                        <li><button>Login/Signup</button></li>
+                        <li><button>Account</button></li>
+                        <li><button>Sign Out</button></li>
+                    </ul>
+                </li>
+                <!-- cart button with an icon image -->
+                <li><button class="cart-button" onclick="location.href='Shopping Cart.html'">
+                        <img src="{% static 'images/cart.png' %}" alt="Cart">
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search/fitler Section by Caden Fontenot-->
+    <section class="search_container">
+        <form class="search-box">
+			
+            <!-- Placeholder for the future filtering logic -->
+            <button type="button" class="filter-button" onclick = "toggleFilters()">Filter</button>
+            <input class="search-input" type="search" placeholder="Search for products..." name = 'filter'>
+            <!-- submit button to trigger search -->
+			
+			<!--Most of this will likely stay incomplete until backend stuff is made
+			because we need items to actually filter-->
+			
+			<ul id = 'filterList' class = 'hidden'>
+			
+				<li><label>
+					<input type = 'checkbox' value = 'men'>men
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'women'>women
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'kids'>kids
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'clothes'>clothes
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'sports'>sports
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'toys'>toys
+				</label></li>
+				
+			</ul>
+            <button type="Submit" class="search-button">Go</button>
+        </form>
+    </section>
+
+    <!-- include the main content of the page -->
+    <main>
+        <!-- categories section -->
+        <!-- these links will direct to product listing page having all the categories -->
+        <!-- does not work because of no products at the moment -->
+        <section class="category-box">
+            <ul class="category-ul">
+                <li><a href="Products.html">Clothes</a></li>
+                <li><a href="Products.html">Shoes</a></li>
+                <li><a href="Products.html">Accessories</a></li>
+                <li><a href="Products.html">Home and Garden</a></li>
+                <li><a href="Products.html">Groceries</a></li>
+                <li><a href="Products.html">School supplies</a></li>
+            </ul>
+        </section>
+
+        <!--ad section -->
+        <section class="Ad-box">
+            <figure>
+                <img src="{% static 'images/Ad_image.png' %}" alt="Ad Banner">
+            </figure>
+        </section>
+
+        <!--Main products section -->
+        <!-- does not work because of no products at moment -->
+        <section class="main-products">
+            <article class="mainprod_link">
+                <a href="Products.html"><img src="{% static 'images/Men.jpeg' %}" alt="Men Products">
+                    <h3>MEN</h3>
+                </a>
+            </article>
+
+            <article class="mainprod_link">
+                <a href="Products.html"><img src="{% static 'images/Women.jpeg' %}" alt="Women Products">
+                    <h3>WOMEN</h3>
+                </a>
+            </article>
+
+            <article class="mainprod_link">
+                <a href="Products.html"><img src="{% static 'images/Kids.jpeg' %}" alt="Kids Products">
+                    <h3>KIDS</h3>
+                </a>
+            </article>
+
+            <article class="mainprod_link">
+                <a href="Products.html"><img src="{% static 'images/HomeGoods.jpg' %}" alt="Home Products">
+                    <h3>HOME</h3>
+                </a>
+            </article>
+        </section>
+
+        <!-- popular products section -->
+        <!--All Will only direct to one product on product list page for now till backend is added-->
+        <section class="popular_prod">
+            <h2>Popular Products</h2>
+            <article class="trending_prod">
+                <a href="Products.html"><img src="images/Shoe_popular.jpg" alt="Trending footwear">
+                    <h3>Sneakers</h3>
+                </a>
+            </article>
+
+            <article class="trending_prod">
+                <a href="Products.html"><img src="images/product.png" alt="Ray-Gun Blaster">
+                    <h3>Ray-Gun Blaster</h3>
+                </a>
+            </article>
+
+            <article class="trending_prod">
+                <a href="Products.html"><img src="images/Sunglasses_popular.jpg" alt="Trending Sunglasses">
+                    <h3>Sunglasses</h3>
+                </a>
+            </article>
+
+            <article class="trending_prod">
+                <a href="Products.html"><img src="images/MenWear_Popular.jpg" alt="Trending Shirts">
+                    <h3>Polo MenShirt</h3>
+                </a>
+            </article>
+
+            <article class="trending_prod">
+                <a href="Products.html"><img src="images/Notebooks_popular.jpg" alt="Trending School Supplies">
+                    <h3>Notebook</h3>
+                </a>
+            </article>
+        </section>
+
+    </main>
+
+
+    <!-- Footer: with site details -->
+    <footer class="footer">
+        <ul class="footer_links">
+            <li><button onclick="openDialog('aboutBox')">ABOUT US</button></li>
+            <li><button onclick="openDialog('contactBox')">CONTACT</button></li>
+            <li><button onclick="openDialog('termsBox')">TERMS OF SERVICE</button></li>
+        </ul>
+    </footer>
+
+    <!-- Dialog boxes for links in footer -->
+    <!-- About dialog box -->
+    <dialog id="aboutBox">
+        <h2>About Us</h2>
+        <p><br>BAYOUstore is an online marketplace designed to connect buyers and sellers in a simple and convenient
+            way. Our platform allows users to explore a variety of products, view detailed information, and enjoy a
+            smooth shopping experience with secure and user-friendly features.</p>
+        <br>
+        <button onclick="closeDialog('aboutBox')">Close</button>
+    </dialog>
+
+    <!-- Conatact Information Diaolg box -->
+    <dialog id="contactBox">
+        <h2>Contact</h2>
+        <p><br><strong>Email:</strong>support@bayoustore.com
+            <strong>Helpline:</strong> +1 666-375981
+        </p>
+        <br>
+        <button onclick="closeDialog('contactBox')">Close</button>
+    </dialog>
+
+    <!-- terms of Service Dialog box -->
+    <dialog id="termsBox">
+        <h2>Terms of Service</h2>
+        <p><br>By using BAYOUstore, you agree to follow our terms and conditions. Users are responsible for providing
+            accurate information and using the platform respectfully. We aim to ensure a safe and reliable marketplace
+            experience, but we are not liable for any misuse or external transactions.</p><br>
+        <button onclick="closeDialog('termsBox')">Close</button>
+    </dialog>
+
+    <!-- External Javascript link -->
+    <script src="{% static 'script.js' %}"></script>
+    <script src="{% static 'script-products.js' %}"></script>
+</body>
+
+</html>

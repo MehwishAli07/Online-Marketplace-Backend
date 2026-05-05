@@ -1,0 +1,273 @@
+
+/*Alec's product details page stuff below  ---------------------------------------------------------------------------------------------------*/
+/* ------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* reset default margin and padding for the whole page */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* apply our font ADLaM to the whole site so i don't have to reprogram that over and over -------------------------------------------------- */
+* {
+    font-family: "ADLaM Display", system-ui, sans-serif;
+}
+
+/* make the font larger */
+.productTitle {
+    font-size: 2rem; 
+    letter-spacing: 0.5px;
+}
+
+/* the sizing stuff for the containers below was by far the most challenging part of this project ------------------------------------------*/
+/* master container standards, it holds all other container sections inside it.... */
+.productDetails_masterContainer {
+    display: grid;
+    grid-template-columns: 5fr 3fr 2fr; /* use ratios to set the grid/section sizes inside the container */
+    gap: 0;
+    padding: 0;
+    width: 100%;
+    height: 65vh; /* use a ratio height system to make it accessible across devices and also save my sanity */
+    align-items: stretch;/*fit the sections to the master container */
+    border:  1px solid grey;
+}
+
+
+/* begin images container standards, image standards, and mouseover functions for the image inside the container as well */
+/* ----------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* product image container on product details page */
+.productDetails_imagesContainer {
+    height: 100%;
+    max-height: 67vh; /* again using ratio for height */
+    overflow: hidden;
+
+    /*this is the centering logic to tell the pictures do be in the middle of the grid always */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* standards for the image itself inside the image container */
+.productDetails_imagesContainer img {
+
+    /*make sure the image stays inside the box even if the box has padding */
+    max-width: 100%; 
+    max-height: 100%;
+    height: auto;    
+    display: block;  
+}
+
+/* standard cursor change when you mouseover the product image to see its interactive to add accessibility */
+.productDetails_imagesContainer img {
+    cursor: zoom-in;
+    transition: transform 0.3s ease; 
+}
+
+/* another mouseover graphic using standard trasnform scale to make the image bigger when hovering to add accessibility */
+.productDetails_imagesContainer img:hover {
+    transform: scale(1.02); 
+}
+
+/* end image container and image stuff */
+/* ----------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* begin product details container middle section */
+/* ----------------------------------------------------------------------------------------------------------------------------*/
+
+.productDetails_productDetailsContainer {
+    display: grid;
+    /* ratio for title, price, description, and button at bottom  */
+    grid-template-rows: 1fr 2fr 6fr 1fr; 
+    
+    height: 100%; 
+    max-height: 67vh;
+    overflow: hidden;
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* extra formatting for the productDetailsConatiner... it was throwing bullets which i didn't want and put the scrollbar  */
+.productDetails_productDetailsContainer ul {
+    list-style-type: none; 
+    padding: 0;           
+    margin: 0;
+    overflow-y: scroll;    
+    height: 100%;         
+}
+
+/* make sure the list items don't have bullets  */
+.productDetails_productDetailsContainer li {
+    list-style: none;
+}
+
+/* make the message seller button look like mehwish's button standards from her header */
+.messageButton{
+    width: 100%;
+    background-color: #f96b13;
+    color: white;
+    border: none;
+    font-family: 'ADLaM Display', sans-serif;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+/* put a little hopher graphic on the button to add accessibility */
+.messageButton:hover {
+    background-color: #d85a0e;
+}
+
+/* end product details container */
+/* ----------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* begin product actions container on the right with the buttons */
+/* ----------------------------------------------------------------------------------------------------------------------------*/
+
+.productDetails_actionsContainer {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 7fr; /* the ratio for the  individual pieces and the button */
+    
+    height: 100%;
+    max-height: 67vh;
+    overflow: hidden;
+
+    padding: 15px;
+    gap: 10px;
+    box-sizing: border-box;
+}
+
+/* this is for the grey info boxes at the top of the section */
+.shippingBox, .quantityAvailableBox, .quantitySelectorBox{
+    border: none; 
+    background-color: #f3f2f1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+/* dropdown for the grey choose quantity box */
+.quantityDropdown {
+    width: 80%;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    padding: 2px;
+}
+
+/* section for the buttons  */
+.actionsBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; 
+    gap: 15px;
+    padding-bottom: 120px; /* i added some padding on the bottom to put it more in the center of the section */
+}
+
+/* the buttons*/
+.actionButton {
+    width: 100%;
+    padding: 15px;
+    background-color: #f96b13; 
+    border: none;      
+    border-radius: 0;  
+    text-transform: uppercase; 
+    cursor: pointer;
+    transition: background 0.3s;
+     color: white;
+}
+
+.actionButton:hover {
+    background-color: #d85a0e;
+}
+
+/*end product actions container to the far right with teh buttons.. ----------------------------------------------------------*/
+/* ----------------------------------------------------------------------------------------------------------------------------*/
+/* END CONTAINERS ON THE PRODUCT DESCRIPTION PAGE -----------------------------------------------------------------------------*/
+
+
+/* Begin Alec's other stuff ----------------------------------------------------------------------------------------------------------*/
+
+/* img overlay script which must sit outside of the image container to make the big product image popup hidden until clicked  */
+.overlay {
+    display: none; /* makes it hidden by default  */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* this is the actual image itself inside the overlay */
+.overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    border: 5px solid white;
+}
+
+.productDetails_productDetailsContainer li {
+    font-weight: 400;          
+    font-size: 0.85rem;       
+    color: #555555;           
+    list-style: none;         
+    margin-bottom: 5px;       
+}
+
+/* make the drop down list for the button in the header  ------------------------------------------------------------------*/
+
+/* tie the dropdown to the button location, , i gotta call mehwishes .nav-links button  */
+.nav-links li {
+    position: relative;
+}
+
+/* dropdown list style*/
+.nav-links li ul {
+    display: none;  /* make it hidden by default */  
+    position: absolute;
+    background: #ffffff;
+    border: 1px solid black;
+    list-style: none;
+    top: 100%;           
+    right: 0;            
+    width: 95px; /* this was the exact right width that seemed to work for me */
+    z-index: 1000;
+}
+
+/* mouseover logic */
+.nav-links li:hover ul {
+    display: block; /* block default hidden setting when mouseover */
+}
+
+/* style the text ilnks in the dropdown*/
+.nav-links li ul li button {
+    width: 100%;
+    background: white;
+    color: #120568;
+    border: none;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+    border-radius: 0;
+    text-align: left;
+    font-size: 0.75rem; /* i had to tinker with this to get the right sizE */
+}
+
+
+/* END ALEC"S STUFF --------------------------------------------------------------------------------------------------------------------------------*/
+/* END ALEC"S STUFF --------------------------------------------------------------------------------------------------------------------------------*/
+
+

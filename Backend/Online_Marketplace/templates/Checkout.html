@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- meta tags for the browser and earch engines -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
+    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
+    <title>BAYOUstore</title>
+    <!-- External CSS link -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- header area -->
+    <header class="header">
+        <!-- navigation bar -->
+        <nav class="navbar">
+            <!-- Website logo: links back to the homepage -->
+            <a href="index.html" class="logo-link">
+                <img class="logo" src="images/logo_image.png" alt="BAYOUstore logo">
+            </a>
+
+            <!-- links to different website pages -->
+            <ul class="nav-links">
+                <li><button onclick="location.href='seller.html'">Sell</button></li>
+                <li><button>Account</button></li>
+                <!-- cart button with an icon image -->
+                <li><button class="cart-button" onclick="location.href='cart.html'">
+                        <img src="images/cart.png" alt="Cart">
+                    </button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search/fitler Section -->
+    <section class="search_container">
+        <search class="search-box">
+            <!-- Placeholder for the future filtering logic -->
+            <button type="button" class="filter-button">Filter</button>
+            <input class="search-input" type="search" placeholder="Search for products...">
+            <!-- submit button to trigger search -->
+            <button type="button" class="search-button">Go</button>
+        </search>
+    </section>
+
+    <!-- include the main content of the page -->
+    <main>
+        <!--Lines across the top section of the website-->
+        <table border="1" width="100%" height="100%">
+            <tr>
+
+        <h1 style="padding-left: 70px;"> Checkout</h1>
+        <table width="100%" cellpadding="10" style="padding-left: 70px;">
+        <tr>
+            <td width="40%" valign="top" style="padding-left: 70px; border-right:2px solid black; padding-right: 70px">
+
+    <h2>Shipping Information</h2>
+        <span style="display: inline-block; border: 2px solid black; width: 200px; padding: 10px;">Delivery</span><br><br>
+        <div class="Full_Name">
+        <label>Full Name:<br></label>
+    <input type="text" size="50">
+        </div><br>
+
+    <div class="Email">
+        <label>Email:<br></label>
+    <input type="text" size="50">
+    </div><br>
+   
+    <div class="Phone_Number">
+        <label>Phone Number:<br></label>
+    <input type="text" size="50">
+    </div><br>
+   
+    <div class="Country">
+        <label>Country:</label>
+    <select>
+        <option value="">Choose country</option>
+        <option>United States</option>
+        <option>Other</option>
+    </select><br><br>
+    </div>
+    
+     <div class="CityStateZipCode">
+            <label>City</label>
+            <input type="text" size="5" style="display:inline-block">
+            <label>State:</label> 
+            <input type="text" size="2" style="display:inline-block">
+            <label>Zip Code:</label> 
+            <input type="text" size="5" style="display:inline-block">
+            <!--For some reason the line will not move to left-->
+    <hr style="width:119%; margin-left:0;">
+    
+    <td>
+    </td>
+</div>
+</td>  
+<td width="60%" valign="top">
+    <h2>Review your cart</h2>
+    <!--All the boxes for customers to view their product and totals-->
+    <span style="display: inline-block;text-align: center;border: 2px solid black; width: 100px; padding: 10px;">Item</span>
+    <span>Item Name / Price</span><br></br>
+    <span style="display: inline-block; text-align: center; width: 100px; padding: 10px; border: 2px solid black;text-align: center;">Item</span>
+    <span>Item Name / Price</span><br></br>
+    <h2>Discount Code</h2>
+    <span style="display: inline-block;border: 2px solid black; width: 150px; padding: 10px; ;">Enter Code</span>
+    <span style="display: inline-block; border: 2px solid black; width: 70px; padding: 10px;">Apply</span><br>
+    <span style="display: inline-block; text-align: center; border: 2px solid black;width: 200px; padding: 10px;">
+    Subtotal $<br>Shipping $<br>Discount (If applicable) -$<br>Total $</span>
+    <br>
+    <button style="display: inline-block; border: 2px solid black; background:#f96b13; width: 200px; padding: 10px; text-align: center;">Pay Now</button>
+    <!--I tried to replicate the line across the top to the bottom, but its not working, so the tables have seperate and uneven lines-->
+    <table border="1" margin-left:0; width="100%" height="100%">
+        <tr>
+        </tr>
+    </table>
+    </td>
+    </tr>
+    </table>
+    </tr>
+    </table>
+
+
+    </main>
+
+    <!-- Footer: with site details -->
+    <footer class="footer">
+        <ul class="footer_links">
+            <li><button onclick="openDialog('aboutBox')">ABOUT US</button></li>
+            <li><button onclick="openDialog('contactBox')">CONTACT</button></li>
+            <li><button onclick="openDialog('termsBox')">TERMS OF SERVICE</button></li>
+        </ul>
+    </footer>
+
+    <!-- Dialog boxes for links in footer -->
+     <!-- About dialog box -->
+    <dialog id="aboutBox">
+        <h2>About Us</h2>
+        <p><br>BAYOUstore is an online marketplace designed to connect buyers and sellers in a simple and convenient
+            way. Our platform allows users to explore a variety of products, view detailed information, and enjoy a
+            smooth shopping experience with secure and user-friendly features.</p>
+        <br>
+        <button onclick="closeDialog('aboutBox')">Close</button>
+    </dialog>
+
+    <!-- Conatact Information Diaolg box -->
+    <dialog id="contactBox">
+        <h2>Contact</h2>
+        <p><br><strong>Email:</strong>support@bayoustore.com
+            <strong>Helpline:</strong> +1 666-375981
+        </p>
+        <br>
+        <button onclick="closeDialog('contactBox')">Close</button>
+    </dialog>
+
+    <!-- terms of Service Dialog box -->
+    <dialog id="termsBox">
+        <h2>Terms of Service</h2>
+        <p><br>By using BAYOUstore, you agree to follow our terms and conditions. Users are responsible for providing
+            accurate information and using the platform respectfully. We aim to ensure a safe and reliable marketplace
+            experience, but we are not liable for any misuse or external transactions.</p><br>
+        <button onclick="closeDialog('termsBox')">Close</button>
+    </dialog>
+
+    <!-- External Javascript link -->
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

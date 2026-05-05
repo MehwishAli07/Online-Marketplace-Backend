@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- meta tags for the browser and earch engines -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
+    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
+    <title>BAYOUstore</title>
+    <!-- External CSS link -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="Solida-style.css">
+</head>
+
+<body>
+    <!-- header area -->
+    <header class="header">
+        <!-- navigation bar -->
+        <nav class="navbar">
+            <!-- Website logo: links back to the homepage -->
+            <a href="index.html" class="logo-link">
+                <img class="logo" src="images/logo_image.png" alt="BAYOUstore logo">
+            </a>
+
+            <!-- links to different website pages -->
+            <ul class="nav-links">
+                <li><button onclick="location.href='seller.html'">Sell</button></li>
+                <li><button>Account</button></li>
+                <!-- cart button with an icon image -->
+                <li><button class="cart-button" onclick="location.href='Shopping Cart.html'">
+                        <img src="images/cart.png" alt="Cart">
+                    </button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search/fitler Section -->
+    <section class="search_container">
+        <search class="search-box">
+            <!-- Placeholder for the future filtering logic -->
+            <button type="button" class="filter-button">Filter</button>
+            <input class="search-input" type="search" placeholder="Search for products...">
+            <!-- submit button to trigger search -->
+            <button type="button" class="search-button">Go</button>
+        </search>
+    </section>
+
+    <!-- include the main content of the page -->
+    <main>
+        <div class="cart-header">Shopping Cart</div>
+    </div>
+    <div class="cart-secondheader">
+        <span>Product Info</span>
+        <span>Price</span>
+        <span>Quantity</span>
+    </div>
+    <!--Box for the Product(Image not decided yet), the $ and the Quantity-->
+    <div class="ProductBox">
+    <ul>
+    <li>Product</li>
+    <li>$</li>
+    <li>-#+</li>
+    </ul>
+    </div>
+    <!--The button to continue to checkout as well as the size of said button-->
+  <span style="display:block;text-align:right;"> 
+        <button style="background:#f96b13; color:black;border:solid black; padding:25px 30px; cursor:pointer;" onclick="location.href='Checkout.html'">Continue to Checkout</button>
+     </span>
+
+    </main>
+
+    <!-- Footer: with site details -->
+    <footer class="footer">
+        <ul class="footer_links">
+            <li><button onclick="openDialog('aboutBox')">ABOUT US</button></li>
+            <li><button onclick="openDialog('contactBox')">CONTACT</button></li>
+            <li><button onclick="openDialog('termsBox')">TERMS OF SERVICE</button></li>
+        </ul>
+    </footer>
+
+    <!-- Dialog boxes for links in footer -->
+     <!-- About dialog box -->
+    <dialog id="aboutBox">
+        <h2>About Us</h2>
+        <p><br>BAYOUstore is an online marketplace designed to connect buyers and sellers in a simple and convenient
+            way. Our platform allows users to explore a variety of products, view detailed information, and enjoy a
+            smooth shopping experience with secure and user-friendly features.</p>
+        <br>
+        <button onclick="closeDialog('aboutBox')">Close</button>
+    </dialog>
+
+    <!-- Conatact Information Diaolg box -->
+    <dialog id="contactBox">
+        <h2>Contact</h2>
+        <p><br><strong>Email:</strong>support@bayoustore.com
+            <strong>Helpline:</strong> +1 666-375981
+        </p>
+        <br>
+        <button onclick="closeDialog('contactBox')">Close</button>
+    </dialog>
+
+    <!-- terms of Service Dialog box -->
+    <dialog id="termsBox">
+        <h2>Terms of Service</h2>
+        <p><br>By using BAYOUstore, you agree to follow our terms and conditions. Users are responsible for providing
+            accurate information and using the platform respectfully. We aim to ensure a safe and reliable marketplace
+            experience, but we are not liable for any misuse or external transactions.</p><br>
+        <button onclick="closeDialog('termsBox')">Close</button>
+    </dialog>
+
+    <!-- External Javascript link -->
+    <script src="script.js"></script>
+</body>
+
+</html>

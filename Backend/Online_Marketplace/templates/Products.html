@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<!-- this head stuff is a standard that our group decided on.. mehwish made it and sent it to everyone so it would be uniform-->
+<!-- begin head --------------------------------------------------------------------------------------------------------------->
+<head>
+
+    <!-- Alec's links to get us the font we decided on as a group--------------------------------------------------------------->
+    <!-- links to the font that we decided to use "ADLAM display"--------------------------------------------------------------->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+
+    <!-- External CSS link -->
+    <link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="style-Product.css">
+	<link rel="stylesheet" href="Alecs_Beautiful_script.css">
+
+    <!-- meta tags for the browser and earch engines -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
+    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
+    <title>BAYOUstore</title>
+    <!-- External CSS link -->
+    <link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="style-products.css">
+<!-- end head ------------------------------------------------------------------------------------------------------------------->
+</head>
+
+<!-- BEGIN BODY------------------------------------------------------------------------------------------------------------------>
+<body>
+    <!-- header area -->
+    <header class="header">
+        <!-- navigation bar -->
+        <nav class="navbar">
+            <!-- Website logo: links back to the homepage -->
+            <a href="index.html" class="logo-link">
+                <img class="logo" src="images/logo_image.png" alt="BAYOUstore logo">
+            </a>
+
+            <!-- links to different website pages -->
+            <ul class="nav-links">
+                <li><button onclick="location.href='seller.html'">Sell</button></li>
+				
+				<!-- Alec's drop down list for the account button that mehwish made --------------------------------------------->
+                <li>
+                    <button>Account</button>
+                    <ul>
+                        <li><button>Login/Signup</button></li>
+                        <li><button>Account</button></li>
+                        <li><button>Sign Out</button></li>
+                    </ul>
+                </li>
+
+                <!-- cart button with an icon image -->
+                <li><button class="cart-button" onclick="location.href='Shopping Cart.html'">
+                        <img src="images/cart.png" alt="Cart">
+                    </button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search/fitler Section by Caden Fontenot-->
+    <section class="search_container">
+        <form class="search-box">
+			
+            <!-- Placeholder for the future filtering logic -->
+            <button type="button" class="filter-button" onclick = "toggleFilters()">Filter</button>
+            <input class="search-input" type="search" placeholder="Search for products..." name = 'filter'>
+            <!-- submit button to trigger search -->
+			
+			<!--Most of this will likely stay incomplete until backend stuff is made
+			because we need items to actually filter-->
+			
+			<ul id = 'filterList' class = 'hidden'>
+			
+				<li><label>
+					<input type = 'checkbox' value = 'men'>men
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'women'>women
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'kids'>kids
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'clothes'>clothes
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'sports'>sports
+				</label></li>
+				
+				<li><label>
+					<input type = 'checkbox' value = 'toys'>toys
+				</label></li>
+				
+			</ul>
+            <button type="Submit" class="search-button">Go</button>
+        </form>
+    </section>
+
+    <!-- include the main content of the page -->
+    <main>
+		<!--Code for products by Caden Fontenot-->
+		<!--Barebones placeholder code to demonstrate functionality of finding and clicking an item-->
+		<!--Getting information about these items to render them cannot be gathered until the backend part-->
+		<section class = 'product_container'>
+			
+			<article class = 'product'>
+				<h2><a href = 'productDetailPage_4.16.26.html'>
+					<img src = 'images/product.png' alt = 'Product'>
+					<p class = 'prod_name'>X9000 Ray-Gun Blaster</p>
+					<p class = 'seller'>Sherrif Unkel</p>
+					<p class='price'>$12.87</p>
+					<p class='rating'>★★★☆☆</p>
+				
+				</a>
+				
+		</article>
+    </main>
+
+    <!-- Footer: with site details -->
+    <footer class="footer">
+        <ul class="footer_links">
+            <li><button onclick="openDialog('aboutBox')">ABOUT US</button></li>
+            <li><button onclick="openDialog('contactBox')">CONTACT</button></li>
+            <li><button onclick="openDialog('termsBox')">TERMS OF SERVICE</button></li>
+        </ul>
+    </footer>
+
+    <!-- Dialog boxes for links in footer -->
+     <!-- About dialog box -->
+    <dialog id="aboutBox">
+        <h2>About Us</h2>
+        <p><br>BAYOUstore is an online marketplace designed to connect buyers and sellers in a simple and convenient
+            way. Our platform allows users to explore a variety of products, view detailed information, and enjoy a
+            smooth shopping experience with secure and user-friendly features.</p>
+        <br>
+        <button onclick="closeDialog('aboutBox')">Close</button>
+    </dialog>
+
+    <!-- Conatact Information Diaolg box -->
+    <dialog id="contactBox">
+        <h2>Contact</h2>
+        <p><br><strong>Email:</strong>support@bayoustore.com
+            <strong>Helpline:</strong> +1 666-375981
+        </p>
+        <br>
+        <button onclick="closeDialog('contactBox')">Close</button>
+    </dialog>
+
+    <!-- terms of Service Dialog box -->
+    <dialog id="termsBox">
+        <h2>Terms of Service</h2>
+        <p><br>By using BAYOUstore, you agree to follow our terms and conditions. Users are responsible for providing
+            accurate information and using the platform respectfully. We aim to ensure a safe and reliable marketplace
+            experience, but we are not liable for any misuse or external transactions.</p><br>
+        <button onclick="closeDialog('termsBox')">Close</button>
+    </dialog>
+
+    <!-- External Javascript link -->
+    <script src="script-products.js"></script>
+	<script src="Alecs_Beautiful_script.js"></script>
+	
+	
+<!-- END BODY------------------------------------------------------------------------------------------------------------------>
+</body>
+
+</html>
