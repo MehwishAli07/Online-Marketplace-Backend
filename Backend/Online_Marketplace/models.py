@@ -31,6 +31,10 @@ class Product(models.Model):
     productimg = models.ImageField(upload_to='product_images/', blank=True, null=True)
 
     seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    categories = models.ManyToManyField(
+        'Category',
+        through='ProductCategory'
+    )
 
     def __str__(self):
         return self.name
@@ -57,3 +61,16 @@ class OrderItem(models.Model):
     quantity = models.IntegerField()
     priceAtPurchase = models.DecimalField(max_digits=6, decimal_places=2)
 
+class Category(models.Model):
+    categoryName = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.categoryName
+
+
+class ProductCategory(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('product', 'category')
