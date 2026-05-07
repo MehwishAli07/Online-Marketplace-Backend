@@ -10,8 +10,18 @@ from django.shortcuts import redirect, get_object_or_404
 #basic pages
 
 #home page
+#Modified by Caden to properly search + filter
+#everyone page needs to return this information for searching and filtering to work
 def home(request):
-    return render(request, 'index.html')
+    categories = Category.objects.all()
+    query = request.GET.get("q", "")
+    selected_categories = request.GET.getlist("category")
+
+    return render(request, "index.html", {
+        "categories": categories,
+        "query": query,
+        "selected_categories": selected_categories,
+    })
 
 @login_required
 # Seller update
