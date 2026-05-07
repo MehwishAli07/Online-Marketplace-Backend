@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
-from .models import Product, Cart, CartItem, Order, OrderItem, UserProfile
+from .models import Product, Cart, CartItem, Order, OrderItem, UserProfile, Category, ProductCategory
+from django.shortcuts import redirect, get_object_or_404
+
 
 # Create your views here.
 
@@ -95,13 +97,6 @@ def delete_product(request, product_id):
     # redirect back to seller page
     return redirect("seller")
 
-    # Cart Page
-def Cart(request):
-    return render(request, 'Shopping Cart.html')
-
-def Checkout(request):
-    return render(request, 'Checkout.html')
-
 #Alec's Product Record Handoff function.. this is what allows records to move between caden, alec, and salida's urls so we can
 #source database from each webpage but ensure the same product is being referenced. this function is to be used on the reciever url page 
 def productRecordHandoff(inputRequest, product_id):
@@ -110,4 +105,82 @@ def productRecordHandoff(inputRequest, product_id):
     
     return render(inputRequest, 'product_details.html', { #put the product into necessary webpage
         'product': product
+    })
+
+#script to connect alec's checkout button to salida's checkout page 
+def checkout_view(request):
+    """
+    Renders Salida's checkout page.
+    """
+    return render(request, 'Checkout.html')
+
+# Online_Marketplace/views.py
+from .models import Cart, CartItem  # These match your models.py
+
+#alec's function to send the product and the number of products selected from productdetails page to the backend shopping cart 
+def add_to_cart(request, product_id):
+    # 1. Get the current user's profile and their specific cart
+    # (Assuming the user is logged in)
+    user_profile = UserProfile.objects.get(user=request.user)
+    user_cart = Cart.objects.get(user=user_profile)
+    
+    # 2. Get the product they clicked on
+    product_to_add = get_object_or_404(Product, id=product_id)
+    
+    # 3. Get the quantity from your dropdown menu
+    qty = request.POST.get('quantity_selection', 1)
+
+    # 4. Create the record in the CartItem table
+    CartItem.objects.create(
+        cart=user_cart,
+        product=product_to_add,
+        quantity=qty
+    )
+
+    # 5. Send them to the checkout page
+    if request.POST.get('action') == 'buy_now':
+        return redirect('checkout_page')
+    
+    return redirect('home')
+
+# alec's function to get the login page 
+def login_view(request):
+    # Make sure 'login.html' matches your file name exactly
+    return render(request, 'login.html')
+
+# alec's function to get the create Account page 
+def createAccount_view(request):
+    # Make sure 'login.html' matches your file name exactly
+    return render(request, 'createAccount.html')
+
+# alec's function to get the account page 
+def account_view(request):
+    # Make sure 'login.html' matches your file name exactly
+    return render(request, 'account.html')
+
+# caden's products
+def Products_view(request):
+    query = request.GET.get("q", "")
+    selected_categories = request.GET.getlist("category")
+
+    products = Product.objects.all()
+
+    # Search filter
+    if query:
+        products = products.filter(name__icontains=query)
+
+    # Category filter
+    if selected_categories:
+        products = products.filter(
+            productcategory__category__categoryName__in=selected_categories
+        ).distinct()
+
+    # Load all categories for the filter list
+    categories = Category.objects.all()
+    #grab info from database and sends it to the render page
+    return render(request, "Products.html", {
+        "products": products,
+        "categories": categories,
+        "selected_categories": selected_categories,
+        "query": query,
     })
