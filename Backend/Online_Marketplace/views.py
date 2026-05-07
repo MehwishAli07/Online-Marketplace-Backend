@@ -94,3 +94,20 @@ def delete_product(request, product_id):
 
     # redirect back to seller page
     return redirect("seller")
+
+    # Cart Page
+def Cart(request):
+    return render(request, 'Shopping Cart.html')
+
+def Checkout(request):
+    return render(request, 'Checkout.html')
+
+#Alec's Product Record Handoff function.. this is what allows records to move between caden, alec, and salida's urls so we can
+#source database from each webpage but ensure the same product is being referenced. this function is to be used on the reciever url page 
+def productRecordHandoff(inputRequest, product_id):
+
+    product = get_object_or_404(Product, id=product_id)#grab product id 
+    
+    return render(inputRequest, 'product_details.html', { #put the product into necessary webpage
+        'product': product
+    })

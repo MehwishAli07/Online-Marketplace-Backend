@@ -61,14 +61,13 @@ class OrderItem(models.Model):
     quantity = models.IntegerField()
     priceAtPurchase = models.DecimalField(max_digits=6, decimal_places=2)
 
-#category Table
 class Category(models.Model):
     categoryName = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.categoryName
 
-#product category Table (to assign categories to products)
+
 class ProductCategory(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
