@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 # Create your models here.
 
 #Using User Extension for user table
@@ -29,6 +29,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     productimg = models.ImageField(upload_to='product_images/', blank=True, null=True)
+    rating = models.DecimalField(max_digits=2,decimal_places=1,default=0,validators=[MinValueValidator(0),MaxValueValidator(5)])
 
     seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     categories = models.ManyToManyField(
