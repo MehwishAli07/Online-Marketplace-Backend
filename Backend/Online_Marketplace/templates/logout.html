@@ -2,10 +2,17 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+
 <!-- this head stuff is a standard that our group decided on.. mehwish made it and sent it to everyone so it would be uniform-->
 <!-- begin head --------------------------------------------------------------------------------------------------------------->
 <head>
+    <!-- meta tags for the browser and earch engines -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
+    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
+    <title>BAYOUstore</title>
 
     <!-- Alec's links to get us the font we decided on as a group--------------------------------------------------------------->
     <!-- links to the font that we decided to use "ADLAM display"--------------------------------------------------------------->
@@ -15,23 +22,19 @@
 
     <!-- External CSS link -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
-	<link rel="stylesheet" href="{% static 'style-Product.css' %}">
-	<link rel="stylesheet" href="{% static 'Alecs_Beautiful_script.css' %}">
+    <link rel="stylesheet" href="{% static 'Alecs_Beautiful_script.css' %}">
 
-    <!-- meta tags for the browser and earch engines -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
-    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
-    <title>BAYOUstore</title>
-    <!-- External CSS link -->
-	<link rel="stylesheet" href="{% static 'style-products.css' %}">
-<!-- end head ------------------------------------------------------------------------------------------------------------------->
 </head>
+<!-- end head ------------------------------------------------------------------------------------------------------------------->
+<!-- end head ------------------------------------------------------------------------------------------------------------------->
 
+<body>
+    <main>
+        <!-- BEGIN BODY------------------------------------------------------------------------------------------------------------------>
 <!-- BEGIN BODY------------------------------------------------------------------------------------------------------------------>
 <body>
+    
+    <!-- again the header and footer was decided as a group, mehwish made it and sent it to everyone so it would be uniform------>
     <!-- header area------------------------------------------------------------------------------------------------------------->
     <header class="header">
         <!-- navigation bar -->
@@ -54,74 +57,31 @@
                         <li><button onclick="location.href='{% url 'account' %}'">Account</button></li>
                         <li><button onclick="location.href='{% url 'logout' %}'">Sign Out</button></li>
                     </ul>
-                </li>>
+                </li>
 
                 <!-- cart button with an icon image -->
-			<li><button class="cart-button" onclick="location.href='#'">
+<li><button class="cart-button" onclick="location.href='#'">
             <img src="{% static 'images/cart.png' %}" alt="Cart">
-            </button></li>
+                    </button></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Search/fitler Section by Caden Fontenot-->
-    <section class="search_container">
-        <form class="search-box" method="GET" action="{% url 'Products' %}">
-			
-            <!-- filtering logic -->
-            <button type="button" class="filter-button" onclick = "toggleFilters()">Filter</button>
-            <input class="search-input" type="search" placeholder="Search for products..." name="q" value="{{ query }}">
-            <!-- submit button to trigger search -->
-			
-			<ul id = 'filterList' class = 'hidden'>
-			{% for category in categories %}
-				<li><label>
-					<input type = 'checkbox' name='category' value = '{{ category.categoryName }}' {% if category.categoryName in selected_categories %}checked{% endif %}>{{ category.categoryName }}
-				</label></li>
-			{% endfor %}
-			</ul>
-            <button type="Submit" class="search-button">Go</button>
-        </form>
-    </section>
+    <!-- end header ------------------------------------------------------------------------------------------------------------------->
+    <!-- end header ------------------------------------------------------------------------------------------------------------------->
 
-    <!-- include the main content of the page -->
-    <main>
-		<!--Code for products by Caden Fontenot-->
+<center>
+    <br><br><br>
+    <h1>---- You Are Logged Out! D:  ----</h1>
+    <br><br><br>
+    <h3>---- Come Back Any Time! ----</h3>
 
-		<section class = 'product_container'>
-		{% for product in products %}
-			<article class = 'product'>
-	
-                <a href="{% url 'product_detail' product.id %}">
-
-                    {% if product.productimg %}
-                        <img src="{{ product.productimg.url }}" alt="{{ product.name }}">
-                    {% else %}
-                        {% if product.name == 'shoes' %}
-                            <img src="{% static 'images/Shoe_popular.jpg' %}" alt="{{ product.name }}">
-                        {% elif product.name == 'Classic Denim Jacket' %}
-                            <img src="{% static 'images/jacket.jpg' %}" alt="{{ product.name }}">
-                        {% else %}
-                            <img src="{% static 'images/product.png' %}" alt="{{ product.name }}">
-                        {% endif %}
-                    {% endif %}
-
-                    <p class='prod_name'>{{ product.name }}</p>
-                    <p class='seller'>{{ product.seller.user.username }}</p>
-                    <p class='price'>${{ product.price }}</p>
-                    <p class='rating'>★★★☆☆</p>
-
-                </a>	
-		    </article>
-		{% empty %}
-			<div class="no-results">
-				<h3>No products found</h3>
-				<p>Try adjusting your search criteria.</p>
-			</div>
-		{% endfor %}
     </main>
+</body>
 
-    <!-- Footer: with site details -->
+
+
+    <!-- mehwishes footer/other stuff--------------------------------------------------------------------------------------------------------------------------------------------->
     <footer class="footer">
         <ul class="footer_links">
             <li><button onclick="openDialog('aboutBox')">ABOUT US</button></li>
@@ -130,8 +90,7 @@
         </ul>
     </footer>
 
-    <!-- Dialog boxes for links in footer -->
-     <!-- About dialog box -->
+    <!-- About dialog box -->
     <dialog id="aboutBox">
         <h2>About Us</h2>
         <p><br>BAYOUstore is an online marketplace designed to connect buyers and sellers in a simple and convenient
@@ -161,12 +120,11 @@
     </dialog>
 
     <!-- External Javascript link -->
-    <script src="{% static 'script-products.js' %}"></script>
-	<script src="{% static 'Alecs_Beautiful_script.js' %}"></script>
-    
-	
-	
-<!-- END BODY------------------------------------------------------------------------------------------------------------------>
+    <script src="script.js"></script>
+    <script src="Alecs_Beautiful_script.js"></script>
+
 </body>
+<!--END PAGE BODY SECTION -------------------------------------------------------------------------------------------------------------------------------------------->
+<!--END PAGE BODY SECTION -------------------------------------------------------------------------------------------------------------------------------------------->
 
 </html>
