@@ -1,8 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
-from .models import Product, Cart, CartItem, Order, OrderItem, UserProfile, Category, ProductCategory
 from django.shortcuts import redirect, get_object_or_404
+from .models import Product, Cart, CartItem, Order, OrderItem, UserProfile, Category, ProductCategory
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+import re
+from django.db import transaction
+from django.contrib import messages
 
 
 # Create your views here.
@@ -113,6 +118,7 @@ def productRecordHandoff(inputRequest, product_id):
 
     product = get_object_or_404(Product, id=product_id)#grab product id 
     
+    
     return render(inputRequest, 'product_details.html', { #put the product into necessary webpage
         'product': product
     })
@@ -158,15 +164,16 @@ def login_view(request):
     # Make sure 'login.html' matches your file name exactly
     return render(request, 'login.html')
 
-# alec's function to get the create Account page 
-def createAccount_view(request):
-    # Make sure 'login.html' matches your file name exactly
-    return render(request, 'createAccount.html')
 
 # alec's function to get the account page 
 def account_view(request):
     # Make sure 'login.html' matches your file name exactly
     return render(request, 'account.html')
+
+# alec's function to get the logout page 
+def logout_view(request):
+    # Make sure 'login.html' matches your file name exactly
+    return render(request, 'logout.html')
 
 # caden's products
 def Products_view(request):
@@ -194,3 +201,47 @@ def Products_view(request):
         "selected_categories": selected_categories,
         "query": query,
     })
+
+#alec's function to send the account creation fields to the backend tables that django has set up
+
+def register_user(request):
+    if request.method == 'POST':
+        un = request.POST.get('username')
+        pw = request.POST.get('password')
+        em = request.POST.get('email')
+        role = request.POST.get('account_type') == 'seller'
+
+        # 1. Validation checks
+        if not re.search(r"\d", pw) or not re.search(r"[ !@#$%^&*(),.?\":{}|<>]", pw):
+            return render(request, 'createAccount.html', {'error': 'Password needs a number and symbol.'})
+
+        if User.objects.filter(username=un).exists():
+            return render(request, 'createAccount.html', {'error': 'Username already exists!'})
+
+        # 2. The "Atomic" Database Save
+# 2. The "Atomic" Database Save
+        try:
+            with transaction.atomic():
+                # Step A: Create User (Triggers signal)
+                new_account = User.objects.create_user(username=un, password=pw, email=em)
+                
+                # Step B: Get and update the profile
+                user_profile = UserProfile.objects.get(user=new_account)
+                user_profile.isSeller = role
+                user_profile.save()
+                
+                # Step C: Create the Cart
+                Cart.objects.get_or_create(user=user_profile)
+
+            # Place these AFTER the atomic block is finished
+            messages.success(request, f'Account created for {un}! You can now login.')
+            print(f"--- DEBUG: Success! {un} created. ---")
+            return redirect('login')
+
+        except Exception as e:
+            print(f"--- DEBUG: Something went wrong: {e} ---")
+            # This 'error' key is what your HTML template looks for
+            return render(request, 'createAccount.html', {'error': f'Database error: {e}'})
+    
+    # This return MUST be outside the 'if POST' block but inside the function
+    return render(request, 'createAccount.html')

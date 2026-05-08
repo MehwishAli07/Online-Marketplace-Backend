@@ -19,10 +19,13 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
 
     # alec's createAccount page path 
-    path('createAccount/', views.createAccount_view, name='createAccount'),
+    path('createAccount/', views.register_user, name='createAccount'),
 
     # alec's account page path 
     path('account/', views.account_view, name='account'),
+
+    # alec's logout page path 
+    path('logout/', views.logout_view, name='logout'),
 
     #cadens' products page 
     path('Products/', views.Products_view, name='Products'),
