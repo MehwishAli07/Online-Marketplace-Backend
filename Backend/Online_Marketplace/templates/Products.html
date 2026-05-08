@@ -26,14 +26,13 @@
     <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
     <title>BAYOUstore</title>
     <!-- External CSS link -->
-    <link rel="stylesheet" href="{% static 'style.css' %}">
 	<link rel="stylesheet" href="{% static 'style-products.css' %}">
 <!-- end head ------------------------------------------------------------------------------------------------------------------->
 </head>
 
 <!-- BEGIN BODY------------------------------------------------------------------------------------------------------------------>
 <body>
-    <!-- header area -->
+    <!-- header area------------------------------------------------------------------------------------------------------------->
     <header class="header">
         <!-- navigation bar -->
         <nav class="navbar">
@@ -44,22 +43,23 @@
 
             <!-- links to different website pages -->
             <ul class="nav-links">
-                <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
-				
-				<!-- Alec's drop down list for the account button that mehwish made --------------------------------------------->
+<li><button onclick="location.href='#'">Sell</button></li>
+
+                <!-- Alec's drop down list for the account button that mehwish made --------------------------------------------->
                 <li>
                     <button>Account</button>
                     <ul>
-                        <li><button>Login/Signup</button></li>
-                        <li><button>Account</button></li>
-                        <li><button>Sign Out</button></li>
+                        <li><button onclick="location.href='{% url 'login' %}'">Login</button></li>
+                        <li><button onclick="location.href='{% url 'createAccount' %}'">Create Account</button></li>
+                        <li><button onclick="location.href='{% url 'account' %}'">Account</button></li>
+                        <li><button onclick="location.href='{% url 'logout' %}'">Sign Out</button></li>
                     </ul>
-                </li>
+                </li>>
 
                 <!-- cart button with an icon image -->
-                <li><button class="cart-button" onclick="location.href='Shopping Cart.html'">
-                        <img src="{% static 'images/cart.png' %}" alt="Cart">
-                    </button></li>
+			<li><button class="cart-button" onclick="location.href='#'">
+            <img src="{% static 'images/cart.png' %}" alt="Cart">
+            </button></li>
             </ul>
         </nav>
     </header>
@@ -109,7 +109,7 @@
                     <p class='prod_name'>{{ product.name }}</p>
                     <p class='seller'>{{ product.seller.user.username }}</p>
                     <p class='price'>${{ product.price }}</p>
-                    <p class='rating'>★★★☆☆</p>
+                    <p class='rating'>{{ product.rating }}/5</p>
 
                 </a>	
 		    </article>
