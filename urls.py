@@ -12,8 +12,23 @@ urlpatterns = [
     # alec's script to handoff the product id value specified at the end of the url
     path('product/<int:product_id>/', views.productRecordHandoff, name='product_detail'), 
 
-    #alec's cart path to salida
-    #path('cart/', views.cart_view, name='cart'),
+    #alec's checkout path button 
+    path('checkout/', views.checkout_view, name='checkout_page'),
+
+    # alec's login page path 
+    path('login/', views.login_view, name='login'),
+
+    # alec's createAccount page path 
+    path('createAccount/', views.register_user, name='createAccount'),
+
+    # alec's account page path 
+    path('account/', views.account_view, name='account'),
+
+    # alec's logout page path 
+    path('logout/', views.logout_view, name='logout'),
+
+    #cadens' products page 
+    path('Products/', views.Products_view, name='Products'),
 ]
 
 
