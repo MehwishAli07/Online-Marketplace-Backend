@@ -13,29 +13,65 @@
     <!-- External CSS link -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <link rel="stylesheet" href="{% static 'Solida-style.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Alecs_Beautiful_script.css' %}">
+
 </head>
 
 <body>
     <!-- header area -->
-    <header class="header">
-        <!-- navigation bar -->
-        <nav class="navbar">
-            <!-- Website logo: links back to the homepage -->
-            <a href="{% url 'home' %}" class="logo-link">
-                <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
-            </a>
+<header class="header">
+    <!-- navigation bar -->
+    <nav class="navbar">
+        <!-- Website logo: links back to the homepage -->
+        <a href="{% url 'home' %}" class="logo-link">
+            <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
+        </a>
 
-            <!-- links to different website pages -->
-            <ul class="nav-links">
-                <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
-                <li><button>Account</button></li>
-                <!-- cart button with an icon image -->
-                <li><button class="cart-button" onclick="location.href='{% url 'Cart' %}'">
-                        <img src="{% static 'images/cart.png' %}" alt="Cart">
-                    </button></li>
-            </ul>
-        </nav>
-    </header>
+        <!-- links to different website pages -->
+        <ul class="nav-links">
+            
+            <!-- ALEC"S django if statements to show these on header only if logged in and/or seller -->
+            {% if user.is_authenticated %}
+                <li style="color: white; margin-right: 15px; align-self: center;">
+                    welcome back! :D {{ user.username }}
+                </li>
+                
+                <!-- the sell button only pops up if user is a seller for authentication -->
+                {% if user.userprofile.isSeller %}
+                    <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
+                {% endif %}
+            {% endif %}
+
+
+            <!-- Alec's django if statements for the drop down list on the account button mehwish made.. authentication  --------------------------------------------->
+            <!-- use logic to show login and create account only if user is NOT logged in... and account and sign out only if user IS logged in --------------------------------------------->
+            <li>
+                <button>Account</button>
+                <ul>
+
+                    <!-- user is NOT logged in so show login and create account... don't show account and logout...-->
+                    {% if not user.is_authenticated %}
+                        <li><button onclick="location.href='{% url 'login' %}'">Login</button></li>
+                        <li><button onclick="location.href='{% url 'createAccount' %}'">Create Account</button></li>
+
+                    <!-- if user is logged in THEN show account and logout buttons...  -->
+                    {% else %}
+                        <li><button onclick="location.href='{% url 'account' %}'">Account Settings</button></li>
+                        <li><button onclick="location.href='{% url 'logout' %}'">Sign Out</button></li>
+                    {% endif %}
+                </ul>
+            </li>
+
+            <!-- cart button with an icon image -->
+            <li>
+                <button class="cart-button" onclick="location.href='{% url 'ShoppingCart' %}'">
+                    <img src="{% static 'images/cart.png' %}" alt="Cart">
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
 
     <!-- Search/fitler Section -->
     <section class="search_container">
@@ -56,8 +92,7 @@
         <span>Price</span>
         <span>Quantity</span>
     </div>
-    <a href="{% url 'Cart' %}">Continue Shopping</a>
-    <!--Box for the Product(Image not decided yet), the $ and the Quantity-->
+    <!--Box for the Product, the $ and the Quantity-->
     <div class="ProductBox">
     <ul>
     {% for item in cart_items %}
@@ -65,13 +100,17 @@
         <ul>
             <!--The product's image, name, price, and quantity-->
             <li>
-                <img src="{{ item.product.productimg.url}}"
-                    alt="{{ item.product.name}}">
+                {% if item.product.productimg %}
+                <!--Alternative if theres no image for the product-->
+                <img src="{{ item.product.productimg.url}}" alt="{{ item.product.name}}">
+                {% endif %}
+            <!--Djangle's version of putting the name, price and quantity without it being hardcoded-->
             </li>
             <li> {{ item.product.name}}  </li>
             <li>${{ item.product.price}}  </li>
             <li>{{ item.quantity}}</li>
             <li>
+                <!--Removes the item from cart-->
                 <a href="{% url 'removeFromCart' item.id %}">
                     Remove
                 </a>
@@ -81,6 +120,9 @@
 {% empty %}
 <br>
 <p>Your cart is empty.</p>
+<br>
+<!--Allows the customer to be redirected to the home page when they click continue shopping-->
+ <a href="{% url 'home' %}">Continue Shopping</a>
 {% endfor%}
     </ul>
     </div>
@@ -134,7 +176,7 @@
     </dialog>
 
     <!-- External Javascript link -->
-    <script src="script.js"></script>
+    <script src="{% static 'script.js' %}"></script>
 </body>
 
 </html>
