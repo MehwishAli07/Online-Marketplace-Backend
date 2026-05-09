@@ -11,6 +11,9 @@ class UserProfile(models.Model):
     isSeller = models.BooleanField(default=False)
     cardNum = models.UUIDField(default=uuid.uuid4, editable=False)
     profileImgLink = models.CharField(max_length=500, blank=True, default="")
+    login_attempts = models.IntegerField(default=0)
+    is_locked = models.BooleanField(default=False)
+
 
     def __str__(self):
         #get the profile as username
@@ -36,6 +39,7 @@ class Product(models.Model):
         through='ProductCategory'
     )
 
+
     def __str__(self):
         return self.name
     
@@ -60,8 +64,7 @@ class OrderItem(models.Model):
 
     quantity = models.IntegerField()
     priceAtPurchase = models.DecimalField(max_digits=6, decimal_places=2)
-
-#category Table
+    #category Table
 class Category(models.Model):
     categoryName = models.CharField(max_length=100, unique=True)
 
