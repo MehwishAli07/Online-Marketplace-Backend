@@ -46,7 +46,7 @@
 
             <!-- links to different website pages -->
             <ul class="nav-links">
-<li><button onclick="location.href='#'">Sell</button></li>
+<li><button onclIick="location.href='{% url 'sell' %}'">Sell</button></li>
 
                 <!-- Alec's drop down list for the account button that mehwish made --------------------------------------------->
                 <li>
@@ -60,7 +60,7 @@
                 </li>
 
                 <!-- cart button with an icon image -->
-<li><button class="cart-button" onclick="location.href='#'">
+<li><button class="cart-button" onclick="location.href='{% url 'ShoppingCart' %}'">
             <img src="{% static 'images/cart.png' %}" alt="Cart">
                     </button></li>
             </ul>
