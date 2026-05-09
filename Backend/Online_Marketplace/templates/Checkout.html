@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +11,7 @@
     <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
     <title>BAYOUstore</title>
     <!-- External CSS link -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
@@ -19,17 +20,17 @@
         <!-- navigation bar -->
         <nav class="navbar">
             <!-- Website logo: links back to the homepage -->
-            <a href="index.html" class="logo-link">
-                <img class="logo" src="images/logo_image.png" alt="BAYOUstore logo">
+           <a href="{% url 'home' %}" class="logo-link">
+                <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
             </a>
 
             <!-- links to different website pages -->
             <ul class="nav-links">
-                <li><button onclick="location.href='seller.html'">Sell</button></li>
+                <li><a href="{% url 'seller' %}"><button>Sell</button></a></li>
                 <li><button>Account</button></li>
                 <!-- cart button with an icon image -->
-                <li><button class="cart-button" onclick="location.href='cart.html'">
-                        <img src="images/cart.png" alt="Cart">
+                <li><button class="cart-button" onclick="location.href='{% url 'Cart' %}'">
+                        <img src="{% static 'images/cart.png' %}" alt="Cart">
                     </button></li>
             </ul>
         </nav>
@@ -48,6 +49,13 @@
 
     <!-- include the main content of the page -->
     <main>
+        {% if request.GET.ordered %}
+        <script>
+            alert("Your order has been placed succesfully! Thank you for shopping at Bayou Market!!");
+        </script>
+        {% endif %}
+        <form method="POST">
+        {% csrf_token %}
         <!--Lines across the top section of the website-->
         <table border="1" width="100%" height="100%">
             <tr>
@@ -61,22 +69,22 @@
         <span style="display: inline-block; border: 2px solid black; width: 200px; padding: 10px;">Delivery</span><br><br>
         <div class="Full_Name">
         <label>Full Name:<br></label>
-    <input type="text" size="50">
+    <input type="text" name="full_name" size="50">
         </div><br>
 
     <div class="Email">
         <label>Email:<br></label>
-    <input type="text" size="50">
+    <input type="text" name="email" size="50">
     </div><br>
    
     <div class="Phone_Number">
         <label>Phone Number:<br></label>
-    <input type="text" size="50">
+    <input type="text" name="phone" size="50">
     </div><br>
    
     <div class="Country">
         <label>Country:</label>
-    <select>
+    <select name="country">
         <option value="">Choose country</option>
         <option>United States</option>
         <option>Other</option>
@@ -85,11 +93,11 @@
     
      <div class="CityStateZipCode">
             <label>City</label>
-            <input type="text" size="5" style="display:inline-block">
+            <input type="text" name="city" size="5" style="display:inline-block">
             <label>State:</label> 
-            <input type="text" size="2" style="display:inline-block">
+            <input type="text" name="state" size="2" style="display:inline-block">
             <label>Zip Code:</label> 
-            <input type="text" size="5" style="display:inline-block">
+            <input type="text" name="zip_code" size="5" style="display:inline-block">
             <!--For some reason the line will not move to left-->
     <hr style="width:119%; margin-left:0;">
     
@@ -100,17 +108,18 @@
 <td width="60%" valign="top">
     <h2>Review your cart</h2>
     <!--All the boxes for customers to view their product and totals-->
-    <span style="display: inline-block;text-align: center;border: 2px solid black; width: 100px; padding: 10px;">Item</span>
-    <span>Item Name / Price</span><br></br>
-    <span style="display: inline-block; text-align: center; width: 100px; padding: 10px; border: 2px solid black;text-align: center;">Item</span>
-    <span>Item Name / Price</span><br></br>
+   {% for item in cart_items %}
+   <img src="{{item.product.productimg.url}}" style="width:100px; height:100px">
+   <span>{{ item.product.name}} / ${{ item.product.price}}</span><br><br>
+   {% endfor %}
+   <strong>Total: ${{total}}</strong>
     <h2>Discount Code</h2>
     <span style="display: inline-block;border: 2px solid black; width: 150px; padding: 10px; ;">Enter Code</span>
     <span style="display: inline-block; border: 2px solid black; width: 70px; padding: 10px;">Apply</span><br>
     <span style="display: inline-block; text-align: center; border: 2px solid black;width: 200px; padding: 10px;">
     Subtotal $<br>Shipping $<br>Discount (If applicable) -$<br>Total $</span>
     <br>
-    <button style="display: inline-block; border: 2px solid black; background:#f96b13; width: 200px; padding: 10px; text-align: center;">Pay Now</button>
+    <button type="submit" style="display: inline-block; border: 2px solid black; background:#f96b13; width: 200px; padding: 10px; text-align: center;">Pay Now</button>
     <!--I tried to replicate the line across the top to the bottom, but its not working, so the tables have seperate and uneven lines-->
     <table border="1" margin-left:0; width="100%" height="100%">
         <tr>
@@ -122,7 +131,7 @@
     </tr>
     </table>
 
-
+    </form>
     </main>
 
     <!-- Footer: with site details -->
