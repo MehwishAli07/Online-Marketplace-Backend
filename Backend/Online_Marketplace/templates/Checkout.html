@@ -12,6 +12,10 @@
     <title>BAYOUstore</title>
     <!-- External CSS link -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Solida-style.css' %}">
+    <link rel="stylesheet" href="{% static 'Alecs_Beautiful_script.css' %}">
+
 </head>
 
 <body>
@@ -24,12 +28,45 @@
                 <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
             </a>
 
-            <!-- links to different website pages -->
-            <ul class="nav-links">
-                <li><a href="{% url 'seller' %}"><button>Sell</button></a></li>
-                <li><button>Account</button></li>
+        <!-- links to different website pages -->
+        <ul class="nav-links">
+            
+            <!-- ALEC"S django if statements to show these on header only if logged in and/or seller -->
+            {% if user.is_authenticated %}
+                <li style="color: white; margin-right: 15px; align-self: center;">
+                    welcome back! :D {{ user.username }}
+                </li>
+                
+                <!-- the sell button only pops up if user is a seller for authentication -->
+                {% if user.userprofile.isSeller %}
+                    <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
+                {% endif %}
+            {% endif %}
+
+
+            <!-- Alec's django if statements for the drop down list on the account button mehwish made.. authentication  --------------------------------------------->
+            <!-- use logic to show login and create account only if user is NOT logged in... and account and sign out only if user IS logged in --------------------------------------------->
+            <li>
+                <button>Account</button>
+                <ul>
+
+                    <!-- user is NOT logged in so show login and create account... don't show account and logout...-->
+                    {% if not user.is_authenticated %}
+                        <li><button onclick="location.href='{% url 'login' %}'">Login</button></li>
+                        <li><button onclick="location.href='{% url 'createAccount' %}'">Create Account</button></li>
+
+                    <!-- if user is logged in THEN show account and logout buttons...  -->
+                    {% else %}
+                        <li><button onclick="location.href='{% url 'account' %}'">Account Settings</button></li>
+                        <li><button onclick="location.href='{% url 'logout' %}'">Sign Out</button></li>
+                    {% endif %}
+                </ul>
+
+            </li>
+
+
                 <!-- cart button with an icon image -->
-                <li><button class="cart-button" onclick="location.href='{% url 'Cart' %}'">
+                <li><button class="cart-button" onclick="location.href='{% url 'ShoppingCart' %}'">
                         <img src="{% static 'images/cart.png' %}" alt="Cart">
                     </button></li>
             </ul>
@@ -49,11 +86,13 @@
 
     <!-- include the main content of the page -->
     <main>
+        <!--A popup comes up when the order is placed, instead of making a brand new HTML page-->
         {% if request.GET.ordered %}
         <script>
-            alert("Your order has been placed succesfully! Thank you for shopping at Bayou Market!!");
+            alert("Your order has been placed successfully! Thank you for shopping at Bayou Market!!");
         </script>
         {% endif %}
+        <!--This is for the user's information-->
         <form method="POST">
         {% csrf_token %}
         <!--Lines across the top section of the website-->
@@ -71,16 +110,6 @@
         <label>Full Name:<br></label>
     <input type="text" name="full_name" size="50">
         </div><br>
-
-    <div class="Email">
-        <label>Email:<br></label>
-    <input type="text" name="email" size="50">
-    </div><br>
-   
-    <div class="Phone_Number">
-        <label>Phone Number:<br></label>
-    <input type="text" name="phone" size="50">
-    </div><br>
    
     <div class="Country">
         <label>Country:</label>
@@ -109,16 +138,22 @@
     <h2>Review your cart</h2>
     <!--All the boxes for customers to view their product and totals-->
    {% for item in cart_items %}
+   {% if item.product.productimg %}
    <img src="{{item.product.productimg.url}}" style="width:100px; height:100px">
-   <span>{{ item.product.name}} / ${{ item.product.price}}</span><br><br>
+   {% endif %}
+   <span>{{ item.product.name }} / ${{ item.product.price }}</span><br><br>
    {% endfor %}
    <strong>Total: ${{total}}</strong>
     <h2>Discount Code</h2>
     <span style="display: inline-block;border: 2px solid black; width: 150px; padding: 10px; ;">Enter Code</span>
     <span style="display: inline-block; border: 2px solid black; width: 70px; padding: 10px;">Apply</span><br>
     <span style="display: inline-block; text-align: center; border: 2px solid black;width: 200px; padding: 10px;">
-    Subtotal $<br>Shipping $<br>Discount (If applicable) -$<br>Total $</span>
-    <br>
+    <div class="CheckoutBox">
+        <p>Subtotal: ${{ total }}</p>
+        <p>Shipping: $0 </p>
+        <p>Discount: -$</p>
+        <h3>Total: ${{ total }}</h3>
+    </div>
     <button type="submit" style="display: inline-block; border: 2px solid black; background:#f96b13; width: 200px; padding: 10px; text-align: center;">Pay Now</button>
     <!--I tried to replicate the line across the top to the bottom, but its not working, so the tables have seperate and uneven lines-->
     <table border="1" margin-left:0; width="100%" height="100%">
@@ -174,7 +209,7 @@
     </dialog>
 
     <!-- External Javascript link -->
-    <script src="script.js"></script>
+    <script src="{% static 'script.js' %}"></script>
 </body>
 
 </html>
