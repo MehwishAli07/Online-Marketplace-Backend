@@ -1,0 +1,222 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- this head stuff is a standard that our group decided on.. mehwish made it and sent it to everyone so it would be uniform-->
+<!-- begin head --------------------------------------------------------------------------------------------------------------->
+<head>
+    <!-- meta tags for the browser and earch engines -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
+    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
+    <title>BAYOUstore</title>
+
+    <!-- Alec's links to get us the font we decided on as a group--------------------------------------------------------------->
+    <!-- links to the font that we decided to use "ADLAM display"--------------------------------------------------------------->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ADLaM+Display&display=swap" rel="stylesheet">
+
+    <!-- External CSS link -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Alecs_Beautiful_script.css' %}">
+
+</head>
+<!-- end head ------------------------------------------------------------------------------------------------------------------->
+<!-- end head ------------------------------------------------------------------------------------------------------------------->
+
+<body>
+    <main>
+        <!-- BEGIN BODY------------------------------------------------------------------------------------------------------------------>
+<!-- BEGIN BODY------------------------------------------------------------------------------------------------------------------>
+<body>
+    
+    <!-- again the header and footer was decided as a group, mehwish made it and sent it to everyone so it would be uniform------>
+    <!-- header area------------------------------------------------------------------------------------------------------------->
+<!-- header area------------------------------------------------------------------------------------------------------------->
+<!-- header area------------------------------------------------------------------------------------------------------------->
+<header class="header">
+    <!-- navigation bar -->
+    <nav class="navbar">
+        <!-- Website logo: links back to the homepage -->
+        <a href="{% url 'home' %}" class="logo-link">
+            <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
+        </a>
+
+        <!-- links to different website pages -->
+        <ul class="nav-links">
+            
+            <!-- ALEC"S django if statements to show these on header only if logged in and/or seller -->
+            {% if user.is_authenticated %}
+                <li style="color: white; margin-right: 15px; align-self: center;">
+                    welcome back! :D {{ user.username }}
+                </li>
+                
+                <!-- the sell button only pops up if user is a seller for authentication -->
+                {% if user.userprofile.isSeller %}
+                    <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
+                {% endif %}
+            {% endif %}
+
+
+            <!-- Alec's django if statements for the drop down list on the account button mehwish made.. authentication  --------------------------------------------->
+            <!-- use logic to show login and create account only if user is NOT logged in... and account and sign out only if user IS logged in --------------------------------------------->
+            <li>
+                <button>Account</button>
+                <ul>
+
+                    <!-- user is NOT logged in so show login and create account... don't show account and logout...-->
+                    {% if not user.is_authenticated %}
+                        <li><button onclick="location.href='{% url 'login' %}'">Login</button></li>
+                        <li><button onclick="location.href='{% url 'createAccount' %}'">Create Account</button></li>
+
+                    <!-- if user is logged in THEN show account and logout buttons...  -->
+                    {% else %}
+                        <li><button onclick="location.href='{% url 'account' %}'">Account Settings</button></li>
+                        <li><button onclick="location.href='{% url 'logout' %}'">Sign Out</button></li>
+                    {% endif %}
+                </ul>
+            </li>
+
+            <!-- cart button with an icon image -->
+            <li>
+                <button class="cart-button" onclick="location.href='{% url 'checkout_page' %}'">
+                    <img src="{% static 'images/cart.png' %}" alt="Cart">
+                </button>
+            </li>
+        </ul>
+    </nav>
+</header>
+    <!-- end header ------------------------------------------------------------------------------------------------------------------->
+    <!-- end header ------------------------------------------------------------------------------------------------------------------->
+
+<center>
+    <br><br><br>
+    <h1>---- Create Account! :D ----</h1>
+    <br><br>
+
+    <!-- make a form that uses post and sends info to the create account url dnago requires that its forms use these security tokens-->
+    <form method="POST" action="{% url 'createAccount' %}">
+        {% csrf_token %}
+                    {% if error %} <!-- if username already exists then throw an error-->
+                <div style="background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px; margin-bottom: 15px;">
+                    <strong>Wait!</strong> {{ error }}
+                    </div>
+            {% endif %}
+
+            <!-- if theres a message, loop through the messages list thats been made to get the right one -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div style="background-color: #d4edda; color: #155724; padding: 10px; border: 1px solid #c3e6cb; border-radius: 5px; margin-bottom: 15px;">
+                {{ message }}
+             </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- the other forms below-->
+        <table border="0" align="center">
+            
+            <!-- Username form -->
+            <tr>
+                <td align="center"><b>Choose Username:</b></td>
+            </tr>
+                
+            <tr>
+                <td align="center"><input type="text" name="username" style="width: 350px;"></td>
+            </tr>
+
+            <!--password form!-->
+            <tr height="20"><td></td></tr> 
+            <tr>
+                <td align="center"><b>Choose your Password (must have 1 special character and 1 number):</b></td>
+            </tr>
+            <tr>
+                <td align="center"><input type="password" name="password" style="width: 350px;"></td>
+            </tr>
+
+            <!-- email address form!-->
+            <tr height="20"><td></td></tr> 
+            <tr>
+                <td align="center"><b>Input your email address:</b></td>
+            </tr>
+            <tr>
+                <td align="center"><input type="email" name="email" style="width: 350px;"></td>
+            </tr>
+
+            <!-- account type form-->
+            <tr height="20"><td></td></tr> 
+            <tr>
+                <td align="center"><b>Account Type:</b></td>
+            </tr>
+            <tr>
+                <td align="center">
+                    <select name="account_type" style="width: 358px; padding: 4px; font-family: sans-serif;">
+                        <option value="buyer">Buyer</option>
+                        <option value="seller">Seller</option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+
+        <!-- submit button at the bottom-->
+        <br><br>
+        <input type="submit" value="Create Account" style="background-color: #f96b13; color: white; border: none; padding: 12px 50px; cursor: pointer; font-family: 'ADLaM Display', sans-serif;">
+        
+    </form>
+</center>
+
+    </main>
+</body>
+
+
+
+    <!-- mehwishes footer/other stuff--------------------------------------------------------------------------------------------------------------------------------------------->
+    <footer class="footer">
+        <ul class="footer_links">
+            <li><button onclick="openDialog('aboutBox')">ABOUT US</button></li>
+            <li><button onclick="openDialog('contactBox')">CONTACT</button></li>
+            <li><button onclick="openDialog('termsBox')">TERMS OF SERVICE</button></li>
+        </ul>
+    </footer>
+
+    <!-- About dialog box -->
+    <dialog id="aboutBox">
+        <h2>About Us</h2>
+        <p><br>BAYOUstore is an online marketplace designed to connect buyers and sellers in a simple and convenient
+            way. Our platform allows users to explore a variety of products, view detailed information, and enjoy a
+            smooth shopping experience with secure and user-friendly features.</p>
+        <br>
+        <button onclick="closeDialog('aboutBox')">Close</button>
+    </dialog>
+
+    <!-- Conatact Information Diaolg box -->
+    <dialog id="contactBox">
+        <h2>Contact</h2>
+        <p><br><strong>Email:</strong>support@bayoustore.com
+            <strong>Helpline:</strong> +1 666-375981
+        </p>
+        <br>
+        <button onclick="closeDialog('contactBox')">Close</button>
+    </dialog>
+
+    <!-- terms of Service Dialog box -->
+    <dialog id="termsBox">
+        <h2>Terms of Service</h2>
+        <p><br>By using BAYOUstore, you agree to follow our terms and conditions. Users are responsible for providing
+            accurate information and using the platform respectfully. We aim to ensure a safe and reliable marketplace
+            experience, but we are not liable for any misuse or external transactions.</p><br>
+        <button onclick="closeDialog('termsBox')">Close</button>
+    </dialog>
+
+    <!-- External Javascript link -->
+    <script src="script.js"></script>
+    <script src="Alecs_Beautiful_script.js"></script>
+
+</body>
+<!--END PAGE BODY SECTION -------------------------------------------------------------------------------------------------------------------------------------------->
+<!--END PAGE BODY SECTION -------------------------------------------------------------------------------------------------------------------------------------------->
+
+</html>
