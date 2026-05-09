@@ -5,6 +5,11 @@ urlpatterns = [
     path('', views.home, name='home'),
     #seller dashboard
     path('seller/', views.seller_page, name='seller'),
+
+    # Shopping cart content (Solida)
+    path('ShoppingCart/', views.shopping_cart, name='ShoppingCart'),
+    path('add/<int:product_id>/', views.addProductCart, name='addProductCart'),
+    path('remove/<int:item_id>/', views.removeFromCart, name='removeFromCart'),
     
     #delte a product 
     path('delete/<int:product_id>/', views.delete_product, name='delete_product'),
@@ -19,10 +24,13 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
 
     # alec's createAccount page path 
-    path('createAccount/', views.createAccount_view, name='createAccount'),
+    path('createAccount/', views.register_user, name='createAccount'),
 
     # alec's account page path 
     path('account/', views.account_view, name='account'),
+
+    # alec's logout page path 
+    path('logout/', views.logout_view, name='logout'),
 
     #cadens' products page 
     path('Products/', views.Products_view, name='Products'),
