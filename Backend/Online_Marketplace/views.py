@@ -14,7 +14,7 @@ from django.contrib import messages
 
 #basic pages
 
-#home page
+#home page (index.html)
 #Modified by Caden to properly search + filter
 #everyone page needs to return this information for searching and filtering to work
 def home(request):
@@ -130,9 +130,6 @@ def checkout_view(request):
     """
     return render(request, 'Checkout.html')
 
-# Online_Marketplace/views.py
-from .models import Cart, CartItem  # These match your models.py
-
 #alec's function to send the product and the number of products selected from productdetails page to the backend shopping cart 
 def add_to_cart(request, product_id):
     # 1. Get the current user's profile and their specific cart
@@ -163,7 +160,6 @@ def add_to_cart(request, product_id):
 def login_view(request):
     # Make sure 'login.html' matches your file name exactly
     return render(request, 'login.html')
-
 
 # alec's function to get the account page 
 def account_view(request):
@@ -246,15 +242,46 @@ def register_user(request):
     # This return MUST be outside the 'if POST' block but inside the function
     return render(request, 'createAccount.html')
 
-def addProductCart(request, product_id):
-    product = Product.objects.get(id=product_id)
-    cart_item, created = CartItem.objects.get_or_create(product = product,
-    user = request.user)
-    cart_item.quantity += 1
-    cart_item.save()
-    return redirect('Cart')
+#Cart stuff (Solida)
+#Trying to access this without logging in crashes the website
+@login_required
+def shopping_cart(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    cart = Cart.objects.get(user=user_profile)
+    items = CartItem.objects.filter(cart=cart)
 
+    total_price = sum(item.product.price * item.quantity for item in items)
+
+    return render(request, 'ShoppingCart.html', {
+        'items': items,
+        'total_price': total_price
+    })
+
+@login_required
+def addProductCart(request, product_id):
+
+    product = get_object_or_404(Product, id=product_id)
+
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    cart, created = Cart.objects.get_or_create(user=user_profile)
+
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart,
+        product=product
+    )
+
+    if not created:
+        cart_item.quantity += 1
+    else:
+        cart_item.quantity = 1
+
+    cart_item.save()
+
+    return redirect('ShoppingCart')
+
+@login_required
 def removeFromCart(request, item_id):
     cart_item = CartItem.objects.get(id=item_id)
     cart_item.delete()
-    return redirect('Cart')
+    return redirect('ShoppingCart')
