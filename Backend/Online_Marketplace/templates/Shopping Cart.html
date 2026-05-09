@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +11,8 @@
     <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
     <title>BAYOUstore</title>
     <!-- External CSS link -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="Solida-style.css">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Solida-style.css' %}">
 </head>
 
 <body>
@@ -20,17 +21,17 @@
         <!-- navigation bar -->
         <nav class="navbar">
             <!-- Website logo: links back to the homepage -->
-            <a href="index.html" class="logo-link">
-                <img class="logo" src="images/logo_image.png" alt="BAYOUstore logo">
+            <a href="{% url 'home' %}" class="logo-link">
+                <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
             </a>
 
             <!-- links to different website pages -->
             <ul class="nav-links">
-                <li><button onclick="location.href='seller.html'">Sell</button></li>
+                <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
                 <li><button>Account</button></li>
                 <!-- cart button with an icon image -->
-                <li><button class="cart-button" onclick="location.href='Shopping Cart.html'">
-                        <img src="images/cart.png" alt="Cart">
+                <li><button class="cart-button" onclick="location.href='{% url 'Cart' %}'">
+                        <img src="{% static 'images/cart.png' %}" alt="Cart">
                     </button></li>
             </ul>
         </nav>
@@ -50,23 +51,45 @@
     <!-- include the main content of the page -->
     <main>
         <div class="cart-header">Shopping Cart</div>
-    </div>
     <div class="cart-secondheader">
         <span>Product Info</span>
         <span>Price</span>
         <span>Quantity</span>
     </div>
+    <a href="{% url 'Cart' %}">Continue Shopping</a>
     <!--Box for the Product(Image not decided yet), the $ and the Quantity-->
     <div class="ProductBox">
     <ul>
-    <li>Product</li>
-    <li>$</li>
-    <li>-#+</li>
+    {% for item in cart_items %}
+    <div class="ImageInCart">
+        <ul>
+            <!--The product's image, name, price, and quantity-->
+            <li>
+                <img src="{{ item.product.productimg.url}}"
+                    alt="{{ item.product.name}}">
+            </li>
+            <li> {{ item.product.name}}  </li>
+            <li>${{ item.product.price}}  </li>
+            <li>{{ item.quantity}}</li>
+            <li>
+                <a href="{% url 'removeFromCart' item.id %}">
+                    Remove
+                </a>
+            </li>
+        </ul>
+    </div>
+{% empty %}
+<br>
+<p>Your cart is empty.</p>
+{% endfor%}
     </ul>
     </div>
+    {% if cart_items %}
+    <h3>Total: ${{ total }}</h3>
+    {% endif %}
     <!--The button to continue to checkout as well as the size of said button-->
   <span style="display:block;text-align:right;"> 
-        <button style="background:#f96b13; color:black;border:solid black; padding:25px 30px; cursor:pointer;" onclick="location.href='Checkout.html'">Continue to Checkout</button>
+        <button style="background:#f96b13; color:black;border:solid black; padding:25px 30px; cursor:pointer;" onclick="location.href='{% url 'Checkout'%}'" >Continue to Checkout</button>
      </span>
 
     </main>
