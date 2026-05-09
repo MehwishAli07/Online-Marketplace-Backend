@@ -2,7 +2,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 from .models import Product, Cart, CartItem, Order, OrderItem, UserProfile
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+from django.shortcuts import redirect, get_object_or_404
+from .models import Product, Cart, CartItem, Order, OrderItem, UserProfile, Category, ProductCategory
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+import re
+from django.db import transaction
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from .models import UserProfile
 # Create your views here.
 
 #basic pages
@@ -94,3 +110,234 @@ def delete_product(request, product_id):
 
     # redirect back to seller page
     return redirect("seller")
+
+
+    # ShoppingCart Page the person has to be logged in to use it too
+@login_required
+def shopping_cart(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    cart, created = Cart.objects.get_or_create(user=user_profile)
+
+    cart_items = CartItem.objects.filter(cart=cart)
+
+    # the mathy stuff so that the user sees how much all their products cost
+    total = sum(item.product.price * item.quantity for item in cart_items)
+
+    return render(request, 'ShoppingCart.html', {
+        'cart_items': cart_items,
+        'total': total
+    })
+
+    # Checkout page that asks for the user's info they also have to be logged in to see checkout
+@login_required
+def Checkout(request):
+    user_profile=UserProfile.objects.get(user=request.user)
+    cart = Cart.objects.filter(user=user_profile).first()
+    cart_items = CartItem.objects.filter(cart=cart)
+    total = sum(item.product.price * item.quantity for item in cart_items)
+
+    # This ask the user for their information
+    if request.method == 'POST':
+        #Saving the order
+        order = Order.objects.create(
+            user=user_profile,
+            billing=request.POST['full_name'],
+            full_name=request.POST['full_name'],
+            country=request.POST['country'],
+            city=request.POST['city'],
+            state=request.POST['state'],
+            zip_code=request.POST['zip_code'],
+        )
+        # Saving the items to cart that they clicked on alec's add to cart 
+        for item in cart_items:
+            OrderItem.objects.create(
+                 order=order,
+                 product=item.product,
+                 quantity=item.quantity,
+                 priceAtPurchase=item.product.price,
+           )
+        # after checkout cart clears 
+        cart_items.delete()
+        return redirect('/Checkout/?ordered=true')
+    return render(request, 'Checkout.html',{
+        'cart_items': cart_items,
+        'total':total,
+    })
+
+def productRecordHandoff(inputRequest, product_id):
+
+    product = get_object_or_404(Product, id=product_id)#grab product id 
+    
+    return render(inputRequest, 'product_details.html', { #put the product into necessary webpage
+        'product': product
+    })
+    # Online_Marketplace/views.py
+from .models import Cart, CartItem  # These match your models.py
+
+#alec's function to send the product and the number of products selected from productdetails page to the backend shopping cart 
+def add_to_cart(request, product_id):
+    
+    #get user profile and their cart 
+    user_profile = UserProfile.objects.get(user=request.user)
+    user_cart = Cart.objects.get(user=user_profile)
+    
+    #get product usear clicked on and get the quantity
+    product_to_add = get_object_or_404(Product, id=product_id)
+    qty = request.POST.get('quantity_selection', 1)
+
+    #make a record in the cart item table in the backend... 
+    CartItem.objects.create(
+        cart=user_cart,
+        product=product_to_add,
+        quantity=qty
+    )
+
+    #send the user to salida's checkout page.. 
+    if request.POST.get('action') == 'buy_now':
+        return redirect('Checkout')
+    
+    return redirect('home')
+
+from django.contrib import messages
+
+#alecs function to handle login page errors, messages, lockout, and standard 
+def login_view(request):
+
+    if request.method == 'POST':
+        user_name = request.POST.get('username')
+        pass_word = request.POST.get('password')
+
+        try:
+            #look up the user and their profile 
+            user_obj = User.objects.get(username=user_name)
+            profile = UserProfile.objects.get(user=user_obj)  
+            #if the account is already locked then block 
+            if profile.is_locked:
+                messages.error(request, "your account is locked.")
+                return render(request, 'login.html')
+        except (User.DoesNotExist, UserProfile.DoesNotExist):
+            profile = None 
+
+        #authenticate the user 
+        user = authenticate(request, username=user_name, password=pass_word)
+
+        #if user exists in backend database 
+        if user is not None:
+            #reset login attempts and login 
+            if profile:
+                profile.login_attempts = 0
+                profile.save()
+                profile.refresh_from_db()
+            login(request, user)
+            return redirect('home')
+
+        #throw the logic for login attemps number 
+        else:
+            if profile:
+                profile.login_attempts += 1
+                if profile.login_attempts >= 6:
+                    profile.is_locked = True
+                profile.save()
+                profile.refresh_from_db()
+                
+                # message based on how many tries they have left
+                if profile.is_locked:
+                    messages.error(request, "You have failed to login too many times. Your account is now locked.")
+                else:
+                    left = 6 - profile.login_attempts
+                    messages.error(request, f"Invalid password. You have {left} attempts remaining.")
+
+            #logic for if the user doesn't even exist in the database 
+            else:
+                messages.error(request, "Invalid username or password.")
+            return render(request, 'login.html')
+
+    # if get request, just show the page 
+    return render(request, 'login.html')
+
+
+# alec's function to get the account page 
+def account_view(request):
+    return render(request, 'account.html')
+
+# alec's function to get the logout page 
+def logout_view(request):
+    logout(request) 
+    return render(request, 'logout.html') 
+
+# caden's products
+def Products_view(request):
+    query = request.GET.get("q", "")
+    selected_categories = request.GET.getlist("category")
+
+    products = Product.objects.all()
+
+    # Search filter
+    if query:
+        products = products.filter(name__icontains=query)
+
+    # Category filter
+    if selected_categories:
+        products = products.filter(
+            productcategory__category__categoryName__in=selected_categories
+        ).distinct()
+
+    # Load all categories for the filter list
+    categories = Category.objects.all()
+    #grab info from database and sends it to the render page
+    return render(request, "Products.html", {
+        "products": products,
+        "categories": categories,
+        "selected_categories": selected_categories,
+        "query": query,
+    })
+
+#alec's function to send the account creation fields to the backend tables that django has set up
+def register_user(request):
+
+    if request.method == 'POST':
+        un = request.POST.get('username')
+        pw = request.POST.get('password')
+        em = request.POST.get('email')
+        role = request.POST.get('account_type') == 'seller'
+
+        # validation check.. give a message if the user enters the wrong type of password 
+        if not re.search(r"\d", pw) or not re.search(r"[ !@#$%^&*(),.?\":{}|<>]", pw):
+            return render(request, 'createAccount.html', {'error': 'password needs a number and symbol.'})
+
+        #validation check for the username already existing 
+        if User.objects.filter(username=un).exists():
+            return render(request, 'createAccount.html', {'error': 'that username already exists!'})
+
+        # save info into the database 
+        try:
+            with transaction.atomic():
+                # create the user and update the profile 
+                new_account = User.objects.create_user(username=un, password=pw, email=em)
+                user_profile = UserProfile.objects.get(user=new_account)
+                user_profile.isSeller = role
+                user_profile.save()
+                
+                # now make the cart and attach it to the user 
+                Cart.objects.get_or_create(user=user_profile)
+
+            # success message after the account has been created 
+            messages.success(request, f'Account created for {un}! You can now login.')
+            return redirect('login')
+
+        # if something goes wrong through this 
+        except Exception as e:
+            return render(request, 'createAccount.html', {'error': f'Database error: {e}'})
+    
+    # return the request to create the account 
+    return render(request, 'createAccount.html')
+    
+# the removing item from cart if the user wants to delete something
+def removeFromCart(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    cart_item.delete()
+    return redirect('ShoppingCart')
+
+
+
