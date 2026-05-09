@@ -1,0 +1,1 @@
+I do not understand why but all the image paths will break if the path isn't media/media/... this works good enough so I'm not going to touch it anymore -Caden
