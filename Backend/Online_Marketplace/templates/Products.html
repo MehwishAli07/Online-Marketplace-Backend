@@ -94,17 +94,7 @@
 	
                 <a href="{% url 'product_detail' product.id %}">
 
-                    {% if product.productimg %}
-                        <img src="{{ product.productimg.url }}" alt="{{ product.name }}">
-                    {% else %}
-                        {% if product.name == 'shoes' %}
-                            <img src="{% static 'images/Shoe_popular.jpg' %}" alt="{{ product.name }}">
-                        {% elif product.name == 'Classic Denim Jacket' %}
-                            <img src="{% static 'images/jacket.jpg' %}" alt="{{ product.name }}">
-                        {% else %}
-                            <img src="{% static 'images/product.png' %}" alt="{{ product.name }}">
-                        {% endif %}
-                    {% endif %}
+                    <img src="{{ product.productimg.url }}" alt="{{ product.name }}">
 
                     <p class='prod_name'>{{ product.name }}</p>
                     <p class='seller'>{{ product.seller.user.username }}</p>
