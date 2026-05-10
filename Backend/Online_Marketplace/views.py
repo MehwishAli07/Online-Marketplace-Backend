@@ -139,15 +139,11 @@ def Checkout(request):
 
     # This ask the user for their information
     if request.method == 'POST':
+        billing = request.POST.get('billing','')
         #Saving the order
         order = Order.objects.create(
             user=user_profile,
-            billing=request.POST['full_name'],
-            full_name=request.POST['full_name'],
-            country=request.POST['country'],
-            city=request.POST['city'],
-            state=request.POST['state'],
-            zip_code=request.POST['zip_code'],
+            billing=billing
         )
         # Saving the items to cart that they clicked on alec's add to cart 
         for item in cart_items:
