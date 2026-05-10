@@ -1,0 +1,193 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- meta tags for the browser and earch engines -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BAYOUstore is an online marketplace where users can browse products, sell products, view product details,and manage purchasing with cart and checkout.">
+    <meta name="keywords" content="marketplace, shopping, products, ecommerce, BAYOUstore">
+    <title>BAYOUstore</title>
+    <!-- External CSS link -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'style-products.css' %}">
+    <link rel="stylesheet" href="{% static 'Solida-style.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'Alecs_Beautiful_script.css' %}">
+
+</head>
+
+<body>
+        <!-- header area -->
+    <header class="header">
+        <!-- navigation bar -->
+        <nav class="navbar">
+            <!-- Website logo: links back to the homepage -->
+            <a href="{% url 'home' %}" class="logo-link">
+                <img class="logo" src="{% static 'images/logo_image.png' %}" alt="BAYOUstore logo">
+            </a>
+
+            <!-- links to different website pages -->
+            <ul class="nav-links">
+                
+                <!-- ALEC"S django if statements to show these on header only if logged in and/or seller -->
+                {% if user.is_authenticated %}
+                    <li style="color: white; margin-right: 15px; align-self: center;">
+                        welcome back! :D {{ user.username }}
+                    </li>
+                    
+                    <!-- the sell button only pops up if user is a seller for authentication -->
+                    {% if user.userprofile.isSeller %}
+                        <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
+                    {% endif %}
+                {% endif %}
+
+
+                <!-- Alec's django if statements for the drop down list on the account button mehwish made.. authentication  --------------------------------------------->
+                <!-- use logic to show login and create account only if user is NOT logged in... and account and sign out only if user IS logged in --------------------------------------------->
+                <li>
+                    <button>Account</button>
+                    <ul>
+
+                        <!-- user is NOT logged in so show login and create account... don't show account and logout...-->
+                        {% if not user.is_authenticated %}
+                            <li><button onclick="location.href='{% url 'login' %}'">Login</button></li>
+                            <li><button onclick="location.href='{% url 'createAccount' %}'">Create Account</button></li>
+
+                        <!-- if user is logged in THEN show account and logout buttons...  -->
+                        {% else %}
+                            <li><button onclick="location.href='{% url 'account' %}'">Account Settings</button></li>
+                            <li><button onclick="location.href='{% url 'logout' %}'">Sign Out</button></li>
+                        {% endif %}
+                    </ul>
+                </li>
+
+                <!-- cart button with an icon image -->
+                <li>
+                    <button class="cart-button" onclick="location.href='{% url 'ShoppingCart' %}'">
+                        <img src="{% static 'images/cart.png' %}" alt="Cart">
+                    </button>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Search/fitler Section by Caden Fontenot-->
+    <section class="search_container">
+        <form class="search-box" method="GET" action="{% url 'Products' %}">
+			
+            <!-- filtering logic -->
+            <button type="button" class="filter-button" onclick = "toggleFilters()">Filter</button>
+            <input class="search-input" type="search" placeholder="Search for products..." name="q" value="{{ query }}">
+            <!-- submit button to trigger search -->
+			
+			<ul id = 'filterList' class = 'hidden'>
+			{% for category in categories %}
+				<li><label>
+					<input type = 'checkbox' name='category' value = '{{ category.categoryName }}' {% if category.categoryName in selected_categories %}checked{% endif %}>{{ category.categoryName }}
+				</label></li>
+			{% endfor %}
+			</ul>
+            <button type="Submit" class="search-button">Go</button>
+        </form>
+    </section>
+
+    <!-- include the main content of the page -->
+    <main>
+        <div class="cart-header">Shopping Cart</div>
+    <div class="cart-secondheader">
+        <span>Product Info</span>
+        <span>Price</span>
+        <span>Quantity</span>
+    </div>
+    <!--Box for the Product, the $ and the Quantity-->
+    <div class="ProductBox">
+    <ul>
+    {% for item in cart_items %}
+    <div class="ImageInCart">
+        <ul>
+            <!--The product's image, name, price, and quantity-->
+            <li>
+                {% if item.product.productimg %}
+                <!--Alternative if theres no image for the product-->
+                <img src="{{ item.product.productimg.url}}" alt="{{ item.product.name}}">
+                {% endif %}
+            <!--Djangle's version of putting the name, price and quantity without it being hardcoded-->
+            </li>
+            <li> {{ item.product.name}}  </li>
+            <li>${{ item.product.price}}  </li>
+            <li>{{ item.quantity}}</li>
+            <li>
+                <!--Removes the item from cart-->
+                <a href="{% url 'removeFromCart' item.id %}">
+                    Remove
+                </a>
+            </li>
+        </ul>
+    </div>
+{% empty %}
+<br>
+<p>Your cart is empty.</p>
+<br>
+<!--Allows the customer to be redirected to the home page when they click continue shopping-->
+ <a href="{% url 'home' %}">Continue Shopping</a>
+{% endfor%}
+    </ul>
+    </div>
+    {% if cart_items %}
+    <h3>Total: ${{ total }}</h3>
+    {% endif %}
+    <!--The button to continue to checkout as well as the size of said button-->
+  <span style="display:block;text-align:right;"> 
+        <button style="background:#f96b13; color:black;border:solid black; padding:25px 30px; cursor:pointer;" onclick="location.href='{% url 'Checkout'%}'" >Continue to Checkout</button>
+     </span>
+
+    </main>
+
+    <!-- Footer: with site details -->
+    <footer class="footer">
+        <ul class="footer_links">
+            <li><button onclick="openDialog('aboutBox')">ABOUT US</button></li>
+            <li><button onclick="openDialog('contactBox')">CONTACT</button></li>
+            <li><button onclick="openDialog('termsBox')">TERMS OF SERVICE</button></li>
+        </ul>
+    </footer>
+
+    <!-- Dialog boxes for links in footer -->
+     <!-- About dialog box -->
+    <dialog id="aboutBox">
+        <h2>About Us</h2>
+        <p><br>BAYOUstore is an online marketplace designed to connect buyers and sellers in a simple and convenient
+            way. Our platform allows users to explore a variety of products, view detailed information, and enjoy a
+            smooth shopping experience with secure and user-friendly features.</p>
+        <br>
+        <button onclick="closeDialog('aboutBox')">Close</button>
+    </dialog>
+
+    <!-- Conatact Information Diaolg box -->
+    <dialog id="contactBox">
+        <h2>Contact</h2>
+        <p><br><strong>Email:</strong>support@bayoustore.com
+            <strong>Helpline:</strong> +1 666-375981
+        </p>
+        <br>
+        <button onclick="closeDialog('contactBox')">Close</button>
+    </dialog>
+
+    <!-- terms of Service Dialog box -->
+    <dialog id="termsBox">
+        <h2>Terms of Service</h2>
+        <p><br>By using BAYOUstore, you agree to follow our terms and conditions. Users are responsible for providing
+            accurate information and using the platform respectfully. We aim to ensure a safe and reliable marketplace
+            experience, but we are not liable for any misuse or external transactions.</p><br>
+        <button onclick="closeDialog('termsBox')">Close</button>
+    </dialog>
+
+    <!-- External Javascript link -->
+    <script src="{% static 'script.js' %}"></script>
+    <script src="{% static 'script-products.js' %}"></script>
+</body>
+
+</html>
