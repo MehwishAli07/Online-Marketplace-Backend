@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: bayoustore
-    env: python
-    buildCommand: "./Backend/build.sh"
-    startCommand: "gunicorn Online_Marketplace.wsgi:application"
+    name: online-marketplace-backend
+    rootDir: Backend  
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn Online_Marketplace.wsgi"
 
     envVars:
       - key: DEBUG
