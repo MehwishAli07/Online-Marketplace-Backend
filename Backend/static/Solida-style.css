@@ -3,34 +3,64 @@
 .cart-header {
     background-color: #f96b13;
     color:white;
+    
 }
 /* The second header and color for the product info, price, and quantity */
 .cart-secondheader
 {
     background-color: #120568;
     color:white;
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    text-align: left;
+    max-width: 800px;
 }
 /* The space between the words product info, price, and quantity*/
 .cart-secondheader span {
     padding: 0 30px;
 }
-/*The box and formatting for the product and $ and Quantity*/
+/*The sizing of the image itself in the cart */
+.ImageInCart img{
+    width: 80px;
+    height:80px;
+    object-fit: cover;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right:10px
+}
+/*Messes with the formatting so it looks pretty*/
+.ImageInCart ul{
+    list-style:none;
+    padding: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid black;
+    padding-bottom:10px;
+    margin:0;
+}
+.ImageInCart li {
+    display: block;
+    margin-bottom: 5px;
+}
+    /*The box and formatting for the product and $ and Quantity*/
 .ProductBox{
-       width: 400px;
-        border: 2px solid black;
+       width: 100%;
+       max-width: 800px;
+       margin: 10px 0 20px 0;
+       border: 2px solid black;
+       padding: 10px
     }   
+
 .ProductBox ul{
-    display:flex;
+    display:block;
     margin: 0;
     padding: 0;
 }
 /* Seperates the box and keeps it in one line so its not towering*/
 .ProductBox li{
     list-style: none;
-    flex: 1;
-    padding:10px;
-    text-align: center;
-    border-right:1px solid black;
+    padding:5px;
+    text-align: left;
+    border:none;
 }
 
 /* Reset default margin and padding for the whole page */
