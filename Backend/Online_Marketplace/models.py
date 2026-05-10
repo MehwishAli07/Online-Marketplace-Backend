@@ -1,0 +1,87 @@
+from django.db import models
+from django.contrib.auth.models import User
+import uuid
+
+# Create your models here.
+
+#Using User Extension for user table
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    isSeller = models.BooleanField(default=False)
+    cardNum = models.UUIDField(default=uuid.uuid4, editable=False)
+    profileImgLink = models.CharField(max_length=500, blank=True, default="")
+    login_attempts = models.IntegerField(default=0)
+    is_locked = models.BooleanField(default=False)
+    seller_rating = models.FloatField(default=0.0)
+
+
+    def __str__(self):
+        #get the profile as username
+        return self.user.username
+    
+#Cart table
+class Cart(models.Model):
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Cart of {self.user.username}"
+    
+#products table
+class Product(models.Model):
+    name = models.CharField(max_length=150)
+    description = models.TextField(blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    productimg = models.ImageField(upload_to='product_images/', blank=True, null=True)
+
+    seller = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+    rating = models.DecimalField(
+        max_digits=2,
+        decimal_places=1,
+        default=0
+    )
+
+    categories = models.ManyToManyField(
+        'Category',
+        through='ProductCategory'
+    )
+
+    def __str__(self):
+        return self.name
+    
+#Cart items table
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    quantity = models.IntegerField()
+
+#Order Table
+class Order(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+
+    orderDate = models.DateTimeField(auto_now_add=True)
+    billing = models.CharField(max_length=150)
+
+#Order items Table
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    quantity = models.IntegerField()
+    priceAtPurchase = models.DecimalField(max_digits=6, decimal_places=2)
+    #category Table
+class Category(models.Model):
+    categoryName = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.categoryName
+
+#product category Table (to assign categories to products)
+class ProductCategory(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('product', 'category')
