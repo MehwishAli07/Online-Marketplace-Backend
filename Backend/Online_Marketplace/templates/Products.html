@@ -42,19 +42,40 @@
             </a>
 
             <!-- links to different website pages -->
-            <ul class="nav-links">
-<li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
+        <ul class="nav-links">
+            
+            <!-- ALEC"S django if statements to show these on header only if logged in and/or seller -->
+            {% if user.is_authenticated %}
+                <li style="color: white; margin-right: 15px; align-self: center;">
+                    welcome back! :D {{ user.username }}
+                </li>
+                
+                <!-- the sell button only pops up if user is a seller for authentication -->
+                {% if user.userprofile.isSeller %}
+                    <li><button onclick="location.href='{% url 'seller' %}'">Sell</button></li>
+                {% endif %}
+            {% endif %}
 
-                <!-- Alec's drop down list for the account button that mehwish made --------------------------------------------->
-                <li>
-                    <button>Account</button>
-                    <ul>
+
+            <!-- Alec's django if statements for the drop down list on the account button mehwish made.. authentication  --------------------------------------------->
+            <!-- use logic to show login and create account only if user is NOT logged in... and account and sign out only if user IS logged in --------------------------------------------->
+            <li>
+                <button >Account</button>
+                <ul>
+
+                    <!-- user is NOT logged in so show login and create account... don't show account and logout...-->
+                    {% if not user.is_authenticated %}
                         <li><button onclick="location.href='{% url 'login' %}'">Login</button></li>
                         <li><button onclick="location.href='{% url 'createAccount' %}'">Create Account</button></li>
-                        <li><button onclick="location.href='{% url 'account' %}'">Account</button></li>
+
+                    <!-- if user is logged in THEN show account and logout buttons...  -->
+                    {% else %}
+                        <li><button onclick="location.href='{% url 'account' %}'">Account Settings</button></li>
                         <li><button onclick="location.href='{% url 'logout' %}'">Sign Out</button></li>
-                    </ul>
-                </li>>
+                    {% endif %}
+                </ul>
+
+            </li>
 
                 <!-- cart button with an icon image -->
 			<li><button class="cart-button" onclick="location.href='{% url 'ShoppingCart' %}'">
