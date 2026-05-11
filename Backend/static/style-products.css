@@ -83,7 +83,7 @@ input[type="checkbox"] {
 
 .rating{
 	/*Stars may need to be reworked in the future to allow for black border but yellow inside*/
-	color: gold;
+	color: blue;
 	position: absolute;
     bottom: 10px;
     right: 10px;
